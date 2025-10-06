@@ -1,0 +1,640 @@
+// ============================================
+// TARGET INTERFACES / ЦЕЛЕВЫЕ ИНТЕРФЕЙСЫ
+// ============================================
+
+/**
+ * MetricUnit Interface / Интерфейс метрических единиц
+ * 
+ * EN: Defines the contract for all metric measurement units.
+ *     This is the "Target Interface" in the Adapter pattern.
+ * RU: Определяет контракт для всех метрических единиц измерения.
+ *     Это "Целевой интерфейс" в паттерне Адаптер.
+ */
+interface MetricUnit {
+    /**
+     * EN: Converts the unit value to its base unit
+     * RU: Преобразует значение единицы в базовую единицу
+     */
+    double getValueInBaseUnit();
+    
+    /**
+     * EN: Returns the name of the unit
+     * RU: Возвращает название единицы
+     */
+    String getUnitName();
+}
+
+/**
+ * ImperialUnit Interface / Интерфейс имперских единиц
+ * 
+ * EN: Defines the contract for all imperial measurement units.
+ *     This interface is incompatible with MetricUnit by design.
+ * RU: Определяет контракт для всех имперских единиц измерения.
+ *     Этот интерфейс намеренно несовместим с MetricUnit.
+ */
+interface ImperialUnit {
+    /**
+     * EN: Converts the imperial unit value to meters
+     * RU: Преобразует значение имперской единицы в метры
+     */
+    double getValueInBaseUnit();
+    
+    /**
+     * EN: Returns the name of the imperial unit
+     * RU: Возвращает название имперской единицы
+     */
+    String getUnitName();
+}
+
+// ============================================
+// METRIC UNITS / МЕТРИЧЕСКИЕ ЕДИНИЦЫ
+// ============================================
+
+/**
+ * Meters Class / Класс Метры
+ * 
+ * EN: Concrete implementation of MetricUnit for meters (base unit for distance).
+ * RU: Конкретная реализация MetricUnit для метров (базовая единица расстояния).
+ */
+class Meters implements MetricUnit {
+    // EN: Immutable field for thread safety
+    // RU: Неизменяемое поле для потокобезопасности
+    private final double value;
+    
+    /**
+     * EN: Constructor initializes the meter value
+     * RU: Конструктор инициализирует значение в метрах
+     */
+    public Meters(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Since meters is the base unit, returns value as-is
+     * RU: Так как метр - базовая единица, возвращает значение как есть
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value;
+    }
+    
+    /**
+     * EN: Returns the unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "meters";
+    }
+    
+    /**
+     * EN: Getter for raw value
+     * RU: Геттер для исходного значения
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+/**
+ * Kilometers Class / Класс Километры
+ * 
+ * EN: Concrete implementation of MetricUnit for kilometers.
+ * RU: Конкретная реализация MetricUnit для километров.
+ */
+class Kilometers implements MetricUnit {
+    private final double value;
+    
+    /**
+     * EN: Constructor for kilometers
+     * RU: Конструктор для километров
+     */
+    public Kilometers(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Converts kilometers to base unit (meters). 1 km = 1000 meters
+     * RU: Преобразует километры в базовую единицу (метры). 1 км = 1000 метров
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value * 1000;
+    }
+    
+    /**
+     * EN: Returns the unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "kilometers";
+    }
+    
+    /**
+     * EN: Getter for raw kilometer value
+     * RU: Геттер для исходного значения в километрах
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+/**
+ * Kilograms Class / Класс Килограммы
+ * 
+ * EN: Concrete implementation of MetricUnit for weight/mass.
+ * RU: Конкретная реализация MetricUnit для веса/массы.
+ */
+class Kilograms implements MetricUnit {
+    private final double value;
+    
+    /**
+     * EN: Constructor for kilograms
+     * RU: Конструктор для килограммов
+     */
+    public Kilograms(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Base unit for weight, returns as-is
+     * RU: Базовая единица веса, возвращает как есть
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value;
+    }
+    
+    /**
+     * EN: Returns unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "kilograms";
+    }
+    
+    /**
+     * EN: Getter for raw value
+     * RU: Геттер для исходного значения
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+// ============================================
+// IMPERIAL UNITS (ADAPTEE) / ИМПЕРСКИЕ ЕДИНИЦЫ (АДАПТИРУЕМЫЕ)
+// ============================================
+
+/**
+ * Feet Class / Класс Футы
+ * 
+ * EN: Concrete implementation of ImperialUnit for feet (distance).
+ *     This is an "Adaptee" - the incompatible class we need to adapt.
+ * RU: Конкретная реализация ImperialUnit для футов (расстояние).
+ *     Это "Адаптируемый класс" - несовместимый класс для адаптации.
+ */
+class Feet implements ImperialUnit {
+    private final double value;
+    
+    /**
+     * EN: Constructor for feet
+     * RU: Конструктор для футов
+     */
+    public Feet(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Converts feet to meters. 1 foot = 0.3048 meters
+     * RU: Преобразует футы в метры. 1 фут = 0.3048 метра
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value * 0.3048;
+    }
+    
+    /**
+     * EN: Returns unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "feet";
+    }
+    
+    /**
+     * EN: Getter for raw feet value
+     * RU: Геттер для исходного значения в футах
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+/**
+ * Miles Class / Класс Мили
+ * 
+ * EN: Concrete implementation of ImperialUnit for miles (distance).
+ * RU: Конкретная реализация ImperialUnit для миль (расстояние).
+ */
+class Miles implements ImperialUnit {
+    private final double value;
+    
+    /**
+     * EN: Constructor for miles
+     * RU: Конструктор для миль
+     */
+    public Miles(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Converts miles to meters. 1 mile = 1609.344 meters
+     * RU: Преобразует мили в метры. 1 миля = 1609.344 метра
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value * 1609.344;
+    }
+    
+    /**
+     * EN: Returns unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "miles";
+    }
+    
+    /**
+     * EN: Getter for raw miles value
+     * RU: Геттер для исходного значения в милях
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+/**
+ * Pounds Class / Класс Фунты
+ * 
+ * EN: Concrete implementation of ImperialUnit for weight.
+ * RU: Конкретная реализация ImperialUnit для веса.
+ */
+class Pounds implements ImperialUnit {
+    private final double value;
+    
+    /**
+     * EN: Constructor for pounds
+     * RU: Конструктор для фунтов
+     */
+    public Pounds(double value) {
+        this.value = value;
+    }
+    
+    /**
+     * EN: Converts pounds to kilograms. 1 pound = 0.453592 kilograms
+     * RU: Преобразует фунты в килограммы. 1 фунт = 0.453592 килограмма
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return value * 0.453592;
+    }
+    
+    /**
+     * EN: Returns unit name
+     * RU: Возвращает название единицы
+     */
+    @Override
+    public String getUnitName() {
+        return "pounds";
+    }
+    
+    /**
+     * EN: Getter for raw pounds value
+     * RU: Геттер для исходного значения в фунтах
+     */
+    public double getValue() {
+        return value;
+    }
+}
+
+// ============================================
+// ADAPTER PATTERN / ПАТТЕРН АДАПТЕР
+// ============================================
+
+/**
+ * ImperialToMetricAdapter Class / Класс адаптера ImperialToMetric
+ * 
+ * EN: This is the ADAPTER that makes ImperialUnit compatible with MetricUnit.
+ *     Key aspects:
+ *     1. Implements the Target Interface (MetricUnit)
+ *     2. Wraps the Adaptee (ImperialUnit)
+ *     3. Translates calls from target to adaptee
+ *     4. Allows imperial units to be used as metric units
+ * 
+ * RU: Это АДАПТЕР, который делает ImperialUnit совместимым с MetricUnit.
+ *     Ключевые аспекты:
+ *     1. Реализует целевой интерфейс (MetricUnit)
+ *     2. Оборачивает адаптируемый класс (ImperialUnit)
+ *     3. Транслирует вызовы от целевого к адаптируемому
+ *     4. Позволяет использовать имперские единицы как метрические
+ */
+class ImperialToMetricAdapter implements MetricUnit {
+    // EN: Composition over inheritance - we wrap instead of extending
+    // RU: Композиция вместо наследования - мы оборачиваем вместо расширения
+    private final ImperialUnit imperialUnit;
+    
+    /**
+     * EN: Constructor accepts any ImperialUnit
+     * RU: Конструктор принимает любую ImperialUnit
+     */
+    public ImperialToMetricAdapter(ImperialUnit imperialUnit) {
+        this.imperialUnit = imperialUnit;
+    }
+    
+    /**
+     * EN: Delegates the conversion to the wrapped imperial unit
+     * RU: Делегирует преобразование обёрнутой имперской единице
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        // EN: KEY line - delegation to adaptee
+        // RU: КЛЮЧЕВАЯ строка - делегирование адаптируемому объекту
+        return imperialUnit.getValueInBaseUnit();
+    }
+    
+    /**
+     * EN: Returns unit name with adapted suffix
+     * RU: Возвращает название единицы с суффиксом adapted
+     */
+    @Override
+    public String getUnitName() {
+        return imperialUnit.getUnitName() + " (adapted)";
+    }
+}
+
+/**
+ * MetricToImperialAdapter Class / Класс адаптера MetricToImperial
+ * 
+ * EN: Reverse adapter - makes MetricUnit compatible with ImperialUnit.
+ * RU: Обратный адаптер - делает MetricUnit совместимым с ImperialUnit.
+ */
+class MetricToImperialAdapter implements ImperialUnit {
+    private final MetricUnit metricUnit;
+    
+    /**
+     * EN: Constructor accepts any MetricUnit
+     * RU: Конструктор принимает любую MetricUnit
+     */
+    public MetricToImperialAdapter(MetricUnit metricUnit) {
+        this.metricUnit = metricUnit;
+    }
+    
+    /**
+     * EN: Delegates to wrapped metric unit
+     * RU: Делегирует обёрнутой метрической единице
+     */
+    @Override
+    public double getValueInBaseUnit() {
+        return metricUnit.getValueInBaseUnit();
+    }
+    
+    /**
+     * EN: Returns adapted unit name
+     * RU: Возвращает название адаптированной единицы
+     */
+    @Override
+    public String getUnitName() {
+        return metricUnit.getUnitName() + " (adapted)";
+    }
+}
+
+// ============================================
+// CONVERTER SERVICE / СЕРВИС КОНВЕРТАЦИИ
+// ============================================
+
+/**
+ * UnitConverter Class / Класс конвертера единиц
+ * 
+ * EN: Static utility class for conversion between unit systems.
+ *     Follows Single Responsibility Principle and DRY principle.
+ * RU: Статический утилитный класс для конвертации между системами единиц.
+ *     Следует принципу единой ответственности и принципу DRY.
+ */
+class UnitConverter {
+    
+    /**
+     * EN: Converts any ImperialUnit to Meters
+     * RU: Преобразует любую ImperialUnit в метры
+     */
+    public static Meters convertToMeters(ImperialUnit imperial) {
+        return new Meters(imperial.getValueInBaseUnit());
+    }
+    
+    /**
+     * EN: Converts any ImperialUnit to Kilometers
+     * RU: Преобразует любую ImperialUnit в километры
+     */
+    public static Kilometers convertToKilometers(ImperialUnit imperial) {
+        return new Kilometers(imperial.getValueInBaseUnit() / 1000);
+    }
+    
+    /**
+     * EN: Converts any ImperialUnit to Kilograms
+     * RU: Преобразует любую ImperialUnit в килограммы
+     */
+    public static Kilograms convertToKilograms(ImperialUnit imperial) {
+        return new Kilograms(imperial.getValueInBaseUnit());
+    }
+    
+    /**
+     * EN: Converts any MetricUnit to Feet
+     * RU: Преобразует любую MetricUnit в футы
+     */
+    public static Feet convertToFeet(MetricUnit metric) {
+        return new Feet(metric.getValueInBaseUnit() / 0.3048);
+    }
+    
+    /**
+     * EN: Converts any MetricUnit to Miles
+     * RU: Преобразует любую MetricUnit в мили
+     */
+    public static Miles convertToMiles(MetricUnit metric) {
+        return new Miles(metric.getValueInBaseUnit() / 1609.344);
+    }
+    
+    /**
+     * EN: Converts any MetricUnit to Pounds
+     * RU: Преобразует любую MetricUnit в фунты
+     */
+    public static Pounds convertToPounds(MetricUnit metric) {
+        return new Pounds(metric.getValueInBaseUnit() / 0.453592);
+    }
+}
+
+// ============================================
+// FORMATTER / ФОРМАТТЕР
+// ============================================
+
+/**
+ * UnitFormatter Class / Класс форматирования единиц
+ * 
+ * EN: Handles presentation/output formatting for unit conversions.
+ *     Separates presentation logic from business logic.
+ * RU: Обрабатывает форматирование представления для конвертации единиц.
+ *     Разделяет логику представления от бизнес-логики.
+ */
+class UnitFormatter {
+    
+    /**
+     * EN: Formats a conversion from one unit to another
+     * RU: Форматирует преобразование из одной единицы в другую
+     */
+    public static String format(Object from, Object to) {
+        return formatUnit(from) + " -> " + formatUnit(to);
+    }
+    
+    /**
+     * EN: Formats a single unit with its value and name
+     * RU: Форматирует одну единицу с её значением и названием
+     */
+    private static String formatUnit(Object unit) {
+        // EN: Handle each unit type / RU: Обработка каждого типа единицы
+        if (unit instanceof Meters) {
+            Meters m = (Meters) unit;
+            return String.format("%.2f %s", m.getValue(), m.getUnitName());
+        }
+        if (unit instanceof Kilometers) {
+            Kilometers k = (Kilometers) unit;
+            return String.format("%.2f %s", k.getValue(), k.getUnitName());
+        }
+        if (unit instanceof Kilograms) {
+            Kilograms k = (Kilograms) unit;
+            return String.format("%.2f %s", k.getValue(), k.getUnitName());
+        }
+        if (unit instanceof Feet) {
+            Feet f = (Feet) unit;
+            return String.format("%.2f %s", f.getValue(), f.getUnitName());
+        }
+        if (unit instanceof Miles) {
+            Miles m = (Miles) unit;
+            return String.format("%.2f %s", m.getValue(), m.getUnitName());
+        }
+        if (unit instanceof Pounds) {
+            Pounds p = (Pounds) unit;
+            return String.format("%.2f %s", p.getValue(), p.getUnitName());
+        }
+        // EN: Fallback for unknown types / RU: Резервный вариант
+        return unit.toString();
+    }
+}
+
+// ============================================
+// MAIN APPLICATION / ГЛАВНОЕ ПРИЛОЖЕНИЕ
+// ============================================
+
+/**
+ * UnitConverterApplication Class / Класс приложения конвертера
+ * 
+ * EN: Main entry point demonstrating the Adapter pattern.
+ *     Shows direct conversions, adapter usage, and polymorphism.
+ * RU: Главная точка входа, демонстрирующая паттерн Адаптер.
+ *     Показывает прямые преобразования, использование адаптера и полиморфизм.
+ */
+public class UnitConverterApplication {
+    
+    /**
+     * EN: Main method - program entry point
+     * RU: Главный метод - точка входа программы
+     */
+    public static void main(String[] args) {
+        System.out.println("=== Unit Converter with Adapter Pattern ===\n");
+        
+        // EN: Demonstrate different aspects of the system
+        // RU: Демонстрация различных аспектов системы
+        demonstrateConversions();
+        demonstrateAdapter();
+        demonstratePolymorphism();
+    }
+    
+    /**
+     * EN: Demonstrates direct conversions between imperial and metric systems
+     * RU: Демонстрирует прямые преобразования между имперской и метрической системами
+     */
+    private static void demonstrateConversions() {
+        System.out.println("1. Direct Conversions:");
+        
+        // EN: Create imperial units / RU: Создаём имперские единицы
+        Feet feet = new Feet(10);
+        Miles miles = new Miles(5);
+        Pounds pounds = new Pounds(150);
+        
+        // EN: Convert imperial to metric and display
+        // RU: Преобразуем имперские в метрические и выводим
+        System.out.println("  " + UnitFormatter.format(feet, UnitConverter.convertToMeters(feet)));
+        System.out.println("  " + UnitFormatter.format(miles, UnitConverter.convertToKilometers(miles)));
+        System.out.println("  " + UnitFormatter.format(pounds, UnitConverter.convertToKilograms(pounds)));
+        
+        // EN: Create metric units / RU: Создаём метрические единицы
+        Meters meters = new Meters(100);
+        Kilometers km = new Kilometers(10);
+        Kilograms kg = new Kilograms(70);
+        
+        // EN: Convert metric to imperial and display
+        // RU: Преобразуем метрические в имперские и выводим
+        System.out.println("  " + UnitFormatter.format(meters, UnitConverter.convertToFeet(meters)));
+        System.out.println("  " + UnitFormatter.format(km, UnitConverter.convertToMiles(km)));
+        System.out.println("  " + UnitFormatter.format(kg, UnitConverter.convertToPounds(kg)));
+        System.out.println();
+    }
+    
+    /**
+     * EN: Demonstrates the Adapter pattern in action
+     * RU: Демонстрирует паттерн Адаптер в действии
+     */
+    private static void demonstrateAdapter() {
+        System.out.println("2. Adapter Pattern:");
+        
+        // EN: Create an imperial unit / RU: Создаём имперскую единицу
+        Miles miles = new Miles(10);
+        
+        // EN: Wrap it in adapter - now implements MetricUnit!
+        // RU: Оборачиваем в адаптер - теперь реализует MetricUnit!
+        MetricUnit adapted = new ImperialToMetricAdapter(miles);
+        
+        // EN: Display original and adapted versions
+        // RU: Показываем оригинальную и адаптированную версии
+        System.out.println("  Original: " + miles.getValue() + " " + miles.getUnitName());
+        System.out.println("  Adapted: " + adapted.getUnitName());
+        System.out.println("  Base value: " + adapted.getValueInBaseUnit() + " meters");
+        System.out.println();
+    }
+    
+    /**
+     * EN: Demonstrates polymorphism enabled by the Adapter pattern
+     * RU: Демонстрирует полиморфизм, обеспечиваемый паттерном Адаптер
+     */
+    private static void demonstratePolymorphism() {
+        System.out.println("3. Polymorphism:");
+        
+        // EN: Create array of MetricUnit - holds both native and adapted units
+        // RU: Создаём массив MetricUnit - содержит как нативные, так и адаптированные единицы
+        MetricUnit[] units = {
+                new Meters(50),                                    // EN: Native metric / RU: Нативная метрическая
+                new Kilometers(2),                                 // EN: Native metric / RU: Нативная метрическая
+                new ImperialToMetricAdapter(new Feet(100)),       // EN: Adapted imperial / RU: Адаптированная имперская
+                new ImperialToMetricAdapter(new Miles(3))         // EN: Adapted imperial / RU: Адаптированная имперская
+        };
+        
+        // EN: Process all units uniformly - polymorphism in action!
+        // RU: Обрабатываем все единицы единообразно - полиморфизм в действии!
+        for (MetricUnit unit : units) {
+            System.out.println("  " + unit.getUnitName() + 
+                             " = " + unit.getValueInBaseUnit() + " meters");
+        }
+    }
+}
