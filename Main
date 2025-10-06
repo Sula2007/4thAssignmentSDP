@@ -1,0 +1,24 @@
+public class Main {
+    public static void main(String[] args) {
+        // Test conversions
+        Feet feet = new Feet(10);
+        Meters meters = UnitConverter.convertToMeters(feet);
+        System.out.println(UnitFormatter.format(feet, meters));
+
+        // Test adapter
+        Miles miles = new Miles(5);
+        MetricUnit adapted = new ImperialToMetricAdapter(miles);
+        System.out.println("Adapted: " + adapted.getUnitName());
+        System.out.println("Value: " + adapted.getValueInBaseUnit() + " meters");
+
+        // Test polymorphism
+        MetricUnit[] units = {
+                new Meters(100),
+                new ImperialToMetricAdapter(new Feet(50))
+        };
+
+        for (MetricUnit u : units) {
+            System.out.println(u.getUnitName() + ": " + u.getValueInBaseUnit());
+        }
+    }
+}
